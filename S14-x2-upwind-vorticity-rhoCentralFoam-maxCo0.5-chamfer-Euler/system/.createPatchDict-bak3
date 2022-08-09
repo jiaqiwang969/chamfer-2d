@@ -1,0 +1,137 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2012                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      createPatchDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+pointSync false;
+
+// Patches to create.
+patches
+(
+    {
+        // Name of new patch
+        name INLET;
+
+        // Dictionary to construct new patch from
+        patchInfo
+        {
+            type patch;
+        }
+
+        // How to construct: either from 'patches' or 'set'
+        constructFrom patches;
+
+        // If constructFrom = patches : names of patches. Wildcards allowed.
+        patches (FaceGroup22 FaceGroup29 FaceGroup35);
+
+    }
+    {
+        // Name of new patch
+        name OUTLET;
+
+        // Dictionary to construct new patch from
+        patchInfo
+        {
+            type patch;
+        }
+
+        // How to construct: either from 'patches' or 'set'
+        constructFrom patches;
+
+        // If constructFrom = patches : names of patches. Wildcards allowed.
+        patches (FaceGroup101 FaceGroup107 FaceGroup112);
+
+    }
+
+
+    {
+        name PER1;        //交界面的名字
+        patchInfo
+        {
+            type             cyclicAMI;        //交界面类型
+            neighbourPatch   PER2;           //与之相匹配的交界面名字
+	    matchTolerance   0.0001;
+            transform        translational;
+	    separationVector (-0 -0.0495 -0);
+        }
+        constructFrom        patches;          //使用patches的方法创建cyclicAMI
+	patches (FaceGroup24 
+                 FaceGroup42
+		 FaceGroup64
+		 FaceGroup81
+		 FaceGroup102);  
+
+    }
+    {
+        name PER2;        //交界面的名字
+        patchInfo
+        {
+            type             cyclicAMI;        //交界面类型
+            neighbourPatch   PER1;           //与之相匹配的交界面名字
+            matchTolerance   0.0001;
+            transform        translational;
+            separationVector (-0 -0.0495 -0);
+        }
+        constructFrom        patches;    
+        patches (FaceGroup37
+                 FaceGroup53
+		 FaceGroup97
+                 FaceGroup113);  
+    }
+
+    {
+        // Name of new patch
+        name Blade;
+
+        // Dictionary to construct new patch from
+        patchInfo
+        {
+            type wall;
+        }
+
+        // How to construct: either from 'patches' or 'set'
+        constructFrom patches;
+
+        // If constructFrom = patches : names of patches. Wildcards allowed.
+        patches (FaceGroup57 FaceGroup70 FaceGroup75 FaceGroup87 FaceGroup91);
+
+    }
+
+    {
+        // Name of new patch
+        name frontAndBackPlanes;
+
+        // Dictionary to construct new patch from
+        patchInfo
+        {
+            type empty;
+        }
+
+        // How to construct: either from 'patches' or 'set'
+        constructFrom patches;
+
+        // If constructFrom = patches : names of patches. Wildcards allowed.
+        patches (FaceGroup20 FaceGroup21 FaceGroup27 FaceGroup28 FaceGroup33 FaceGroup34
+                 FaceGroup39 FaceGroup40 FaceGroup45 FaceGroup46 FaceGroup50 FaceGroup51
+                 FaceGroup55 FaceGroup56 FaceGroup61 FaceGroup62 FaceGroup67 FaceGroup68
+                 FaceGroup72 FaceGroup73 FaceGroup78 FaceGroup79 
+		 FaceGroup84 FaceGroup85 FaceGroup89 FaceGroup90
+		 FaceGroup94 FaceGroup95 FaceGroup99 FaceGroup100
+		 FaceGroup105 FaceGroup106 FaceGroup110 FaceGroup111);
+
+
+    }
+);
+
+// ************************************************************************* //

@@ -1,0 +1,122 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2012                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      createPatchDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+pointSync false;
+
+// Patches to create.
+patches
+(
+    {
+        // Name of new patch
+        name INLET;
+
+        // Dictionary to construct new patch from
+        patchInfo
+        {
+            type patch;
+        }
+
+        // How to construct: either from 'patches' or 'set'
+        constructFrom patches;
+
+        // If constructFrom = patches : names of patches. Wildcards allowed.
+        patches (INLET_1 INLET_2 INLET_3);
+
+    }
+    {
+        // Name of new patch
+        name OUTLET;
+
+        // Dictionary to construct new patch from
+        patchInfo
+        {
+            type patch;
+        }
+
+        // How to construct: either from 'patches' or 'set'
+        constructFrom patches;
+
+        // If constructFrom = patches : names of patches. Wildcards allowed.
+        patches (OUTLET_1 OUTLET_2 OUTLET_3);
+
+    }
+
+
+    {
+        name PER1;        //交界面的名字
+        patchInfo
+        {
+            type             cyclicAMI;        //交界面类型
+            neighbourPatch   PER2;           //与之相匹配的交界面名字
+	    matchTolerance   0.0001;
+            transform        translational;
+	    separationVector (-0 -0.0495 -0);
+        }
+        constructFrom        patches;          //使用patches的方法创建cyclicAMI
+	patches (SOLID_WALL_3  SOLID_WALL_11 SOLID_WALL_22 SOLID_WALL_31 SOLID_WALL_43);    //patches的名字
+    }
+    {
+        name PER2;        //交界面的名字
+        patchInfo
+        {
+            type             cyclicAMI;        //交界面类型
+            neighbourPatch   PER1;           //与之相匹配的交界面名字
+            matchTolerance   0.0001;
+            transform        translational;
+            separationVector (-0 -0.0495 -0);
+        }
+        constructFrom        patches;          //使用patches的方法创建cyclicAMI
+        patches (SOLID_WALL_8  SOLID_WALL_16 SOLID_WALL_40 SOLID_WALL_48);    //patches的名字
+    }
+
+    {
+        // Name of new patch
+        name Blade;
+
+        // Dictionary to construct new patch from
+        patchInfo
+        {
+            type wall;
+        }
+
+        // How to construct: either from 'patches' or 'set'
+        constructFrom patches;
+
+        // If constructFrom = patches : names of patches. Wildcards allowed.
+        patches (SOLID_WALL_19 SOLID_WALL_25 SOLID_WALL_28 SOLID_WALL_34 SOLID_WALL_37);
+
+    }
+
+    {
+        // Name of new patch
+        name frontAndBackPlanes;
+
+        // Dictionary to construct new patch from
+        patchInfo
+        {
+            type empty;
+        }
+
+        // How to construct: either from 'patches' or 'set'
+        constructFrom patches;
+
+        // If constructFrom = patches : names of patches. Wildcards allowed.
+        patches (SOLID_WALL_1 SOLID_WALL_2 SOLID_WALL_4 SOLID_WALL_5 SOLID_WALL_6 SOLID_WALL_7 SOLID_WALL_9 SOLID_WALL_10 SOLID_WALL_12  SOLID_WALL_13 SOLID_WALL_14 SOLID_WALL_15 SOLID_WALL_17 SOLID_WALL_18 SOLID_WALL_20 SOLID_WALL_21  SOLID_WALL_23 SOLID_WALL_24 SOLID_WALL_26 SOLID_WALL_27 SOLID_WALL_29 SOLID_WALL_30  SOLID_WALL_32 SOLID_WALL_33 SOLID_WALL_35 SOLID_WALL_36 SOLID_WALL_38 SOLID_WALL_39 SOLID_WALL_41 SOLID_WALL_42  SOLID_WALL_44 SOLID_WALL_45 SOLID_WALL_46 SOLID_WALL_47);
+
+    }
+);
+
+// ************************************************************************* //
